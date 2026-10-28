@@ -8,10 +8,10 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [{ protocol: "https", hostname: "*.public.blob.vercel-storage.com" }],
   },
-  // Incluye los logos e imágenes de /public en las funciones que generan el PDF en Vercel.
+  // Incluye en las funciones del PDF los logos de /public y las fuentes de pdfkit, que se cargan dinámicamente.
   outputFileTracingIncludes: {
-    "/api/cotizaciones/[id]/pdf": ["./public/brand/**", "./public/seed/**"],
-    "/c/[token]": ["./public/brand/**", "./public/seed/**"],
+    "/api/cotizaciones/[id]/pdf": ["./public/brand/**", "./public/seed/**", "./node_modules/pdfkit/js/**"],
+    "/c/[token]": ["./public/brand/**", "./public/seed/**", "./node_modules/pdfkit/js/**"],
   },
 };
 

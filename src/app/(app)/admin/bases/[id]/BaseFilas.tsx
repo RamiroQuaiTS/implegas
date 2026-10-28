@@ -24,7 +24,8 @@ export function BaseFilas(props: { productos: Producto[]; items: BaseItem[]; man
                 type="number"
                 min="0"
                 step="any"
-                value={it.cantidad}
+                value={it.cantidad || ""}
+                onFocus={(e) => e.target.select()}
                 onChange={(e) => setItems(items.map((x, j) => (j === i ? { ...x, cantidad: Number(e.target.value) } : x)))}
                 className="input w-20"
               />
@@ -75,7 +76,9 @@ export function BaseFilas(props: { productos: Producto[]; items: BaseItem[]; man
                 type="number"
                 min="0"
                 step="0.01"
-                value={m.precio}
+                value={m.precio || ""}
+                placeholder="0.00"
+                onFocus={(e) => e.target.select()}
                 onChange={(e) => setMano(mano.map((x, j) => (j === i ? { ...x, precio: Number(e.target.value) } : x)))}
                 className="input w-32"
               />

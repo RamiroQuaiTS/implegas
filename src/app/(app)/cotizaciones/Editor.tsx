@@ -161,6 +161,7 @@ export function Editor({ inicial, productos, clientes, bases, ivaPct }: Props) {
                     min="0"
                     step="any"
                     value={p.cantidad ?? ""}
+                    onFocus={(e) => e.target.select()}
                     placeholder="—"
                     onChange={(e) => setPartida(i, { cantidad: e.target.value === "" ? null : Number(e.target.value) })}
                     className="input"
@@ -183,7 +184,9 @@ export function Editor({ inicial, productos, clientes, bases, ivaPct }: Props) {
                     type="number"
                     min="0"
                     step="0.01"
-                    value={p.precio}
+                    value={p.precio || ""}
+                    placeholder="0.00"
+                    onFocus={(e) => e.target.select()}
                     onChange={(e) => setPartida(i, { precio: Number(e.target.value) })}
                     className="input"
                   />

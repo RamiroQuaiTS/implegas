@@ -74,8 +74,8 @@ const s = StyleSheet.create({
   aviso: { color: "#E00000", textDecoration: "underline", marginTop: 2 },
   nota: { flexDirection: "row", borderWidth: 2, borderColor: "#000", marginTop: 6, padding: 2 },
   firmas: { flexDirection: "row", justifyContent: "space-between", marginTop: 14 },
-  firmaCol: { width: 200 },
-  linea: { borderBottomWidth: 0.6, borderColor: "#555", marginTop: 10, marginBottom: 4, width: 170 },
+  firmaCol: { width: 210, alignItems: "center" },
+  linea: { borderBottomWidth: 0.6, borderColor: "#555", marginTop: 10, marginBottom: 4, width: 190 },
   wa: { flexDirection: "row", alignItems: "center", marginTop: 2 },
   waIcon: { width: 18, height: 18, marginRight: 8 },
   footer: { position: "absolute", bottom: 28, left: 50, right: 76, textAlign: "center", fontSize: 9.5 },
@@ -237,10 +237,10 @@ export function CotizacionPdf({ cot, empresa, imagenes }: CotizacionPdfProps) {
               </View>
             ) : null}
           </View>
-          <View style={[s.firmaCol, { width: 160 }]}>
+          <View style={s.firmaCol}>
             <Text style={s.bold}>ACEPTO</Text>
-            <View style={[s.linea, { width: 140 }]} />
-            <Text style={{ marginLeft: 26 }}>CLIENTE</Text>
+            <View style={s.linea} />
+            <Text>CLIENTE</Text>
           </View>
         </View>
 

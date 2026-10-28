@@ -7,7 +7,7 @@ import { requireAdmin } from "@/lib/auth";
 import { nuevoId, updateDb } from "@/lib/db";
 import { aplicarExcel } from "@/lib/excel";
 import { archivo, numero, texto } from "@/lib/form";
-import { guardarImagen } from "@/lib/storage";
+import { subirImagen } from "@/lib/storage";
 import type { Base, BaseItem, ManoObra, Producto, Rol } from "@/lib/types";
 
 // ---------- Productos ----------
@@ -15,7 +15,7 @@ import type { Base, BaseItem, ManoObra, Producto, Rol } from "@/lib/types";
 export async function guardarProducto(form: FormData) {
   await requireAdmin();
   const id = texto(form, "id") || nuevoId();
-  const imagenUrl = (await guardarImagen(archivo(form, "imagen"), "producto")) ?? (texto(form, "imagenActual") || undefined);
+  const imagenUrl = (await subirImagen(archivo(form, "imagen"), "producto", `/admin/productos/${texto(form, "id") || "nuevo"}`)) ?? (texto(form, "imagenActual") || undefined);
   const producto: Producto = {
     id,
     nombre: texto(form, "nombre").toUpperCase(),
@@ -74,7 +74,7 @@ export async function guardarBase(form: FormData) {
   const id = texto(form, "id") || nuevoId();
   const items = JSON.parse(texto(form, "items") || "[]") as BaseItem[];
   const manoObra = JSON.parse(texto(form, "manoObra") || "[]") as ManoObra[];
-  const logoUrl = (await guardarImagen(archivo(form, "logo"), "base")) ?? (texto(form, "logoActual") || undefined);
+  const logoUrl = (await subirImagen(archivo(form, "logo"), "base", `/admin/bases/${texto(form, "id") || "nueva"}`)) ?? (texto(form, "logoActual") || undefined);
   const base: Base = {
     id,
     nombre: texto(form, "nombre"),
@@ -111,7 +111,7 @@ export async function eliminarBase(form: FormData) {
 
 export async function guardarEmpresa(form: FormData) {
   await requireAdmin();
-  const logo = await guardarImagen(archivo(form, "logo"), "empresa");
+  const logo = await subirImagen(archivo(form, "logo"), "empresa", "/admin/empresa");
   await updateDb((db) => {
     db.empresa = {
       ...db.empresa,

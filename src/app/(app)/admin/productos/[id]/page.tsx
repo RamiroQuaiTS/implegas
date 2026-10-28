@@ -1,4 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
+import { AvisoError } from "@/components/AvisoError";
+import { InputImagen } from "@/components/InputImagen";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
@@ -19,6 +21,7 @@ export default async function ProductoForm({ params }: { params: Promise<{ id: s
         ← Productos
       </Link>
       <h1 className="text-xl font-bold">{p ? "Editar producto" : "Nuevo producto"}</h1>
+      <AvisoError />
       <form action={guardarProducto} className="card space-y-4">
         <input type="hidden" name="id" value={p?.id ?? ""} />
         <input type="hidden" name="imagenActual" value={p?.imagenUrl ?? ""} />
@@ -58,8 +61,8 @@ export default async function ProductoForm({ params }: { params: Promise<{ id: s
         <div className="flex items-center gap-4">
           {p?.imagenUrl && <img src={p.imagenUrl} alt="" className="h-20 w-20 object-contain border rounded" />}
           <label className="block flex-1">
-            <span className="label">Imagen (PNG o JPG, máx. 3 MB)</span>
-            <input name="imagen" type="file" accept="image/png,image/jpeg" className="text-sm" />
+            <span className="label">Imagen (JPG o PNG; las fotos se reducen solas)</span>
+            <InputImagen name="imagen" />
           </label>
           {p?.imagenUrl && (
             <label className="text-sm flex items-center gap-1">

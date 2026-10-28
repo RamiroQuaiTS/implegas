@@ -1,4 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
+import { AvisoError } from "@/components/AvisoError";
+import { InputImagen } from "@/components/InputImagen";
 import { requireAdmin } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { guardarEmpresa } from "../actions";
@@ -17,6 +19,7 @@ export default async function EmpresaPage({ searchParams }: { searchParams: Prom
   return (
     <div className="max-w-2xl space-y-4">
       <h1 className="text-xl font-bold">Datos de la empresa</h1>
+      <AvisoError />
       <p className="text-sm text-gray-500">Así aparecen en el encabezado, la firma y el pie de cada cotización.</p>
       {ok && <p className="rounded-md bg-green-50 text-green-700 text-sm px-3 py-2">Cambios guardados.</p>}
       <form action={guardarEmpresa} className="card space-y-4">
@@ -24,7 +27,7 @@ export default async function EmpresaPage({ searchParams }: { searchParams: Prom
           <img src={e.logoUrl} alt="Logo" className="h-16 object-contain" />
           <label className="block flex-1">
             <span className="label">Cambiar logo (PNG o JPG)</span>
-            <input name="logo" type="file" accept="image/png,image/jpeg" className="text-sm" />
+            <InputImagen name="logo" />
           </label>
         </div>
         {campo("nombre", "Nombre / razón social", "uppercase")}

@@ -1,4 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
+import { AvisoError } from "@/components/AvisoError";
+import { InputImagen } from "@/components/InputImagen";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireSesion } from "@/lib/auth";
@@ -27,6 +29,7 @@ export default async function ClienteForm({ params }: { params: Promise<{ id: st
         ← Clientes
       </Link>
       <h1 className="text-xl font-bold">{c ? c.nombre : "Nuevo cliente"}</h1>
+      <AvisoError />
       <form action={guardarCliente} className="card space-y-4">
         <input type="hidden" name="id" value={c?.id ?? ""} />
         <input type="hidden" name="imagenActual" value={c?.imagenUrl ?? ""} />
@@ -51,7 +54,7 @@ export default async function ClienteForm({ params }: { params: Promise<{ id: st
           {c?.imagenUrl && <img src={c.imagenUrl} alt="" className="h-20 w-20 object-cover border rounded" />}
           <label className="block flex-1">
             <span className="label">Imagen (foto, logo o fachada; PNG o JPG)</span>
-            <input name="imagen" type="file" accept="image/png,image/jpeg" className="text-sm" />
+            <InputImagen name="imagen" />
           </label>
           {c?.imagenUrl && (
             <label className="text-sm flex items-center gap-1">

@@ -2,6 +2,7 @@ import "server-only";
 import { promises as fs } from "fs";
 import path from "path";
 import { put } from "@vercel/blob";
+import { redirect } from "next/navigation";
 import { nuevoId } from "./db";
 
 /**
@@ -53,5 +54,16 @@ export async function cargarImagen(url: string | undefined): Promise<{ data: Buf
     return { data, format: esPng ? "png" : "jpg" };
   } catch {
     return null;
+  }
+}
+
+/** Como guardarImagen, pero si falla regresa al formulario con el error en ?error=. */
+export async function subirImagen(file: File | null, carpeta: string, volverA: string): Promise<string | undefined> {
+  try {
+    return await guardarImagen(file, carpeta);
+  } catch (e) {
+    console.error("Error al subir imagen", e);
+    const msg = e instanceof Error && e.message ? e.message : "No se pudo subir la imagen.";
+    redirect(`${volverA}?error=${encodeURIComponent(msg)}`);
   }
 }

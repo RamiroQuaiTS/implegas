@@ -1,4 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
+import { AvisoError } from "@/components/AvisoError";
+import { InputImagen } from "@/components/InputImagen";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
@@ -19,6 +21,7 @@ export default async function BaseForm({ params }: { params: Promise<{ id: strin
         ← Bases
       </Link>
       <h1 className="text-xl font-bold">{b ? `Base: ${b.nombre}` : "Nueva base"}</h1>
+      <AvisoError />
       <form action={guardarBase} className="card space-y-5">
         <input type="hidden" name="id" value={b?.id ?? ""} />
         <input type="hidden" name="logoActual" value={b?.logoUrl ?? ""} />
@@ -36,7 +39,7 @@ export default async function BaseForm({ params }: { params: Promise<{ id: strin
           {b?.logoUrl && <img src={b.logoUrl} alt="" className="h-16 w-16 object-contain border rounded" />}
           <label className="block flex-1">
             <span className="label">Logo de la categoría (esquina superior derecha del PDF)</span>
-            <input name="logo" type="file" accept="image/png,image/jpeg" className="text-sm" />
+            <InputImagen name="logo" />
           </label>
           {b?.logoUrl && (
             <label className="text-sm flex items-center gap-1">

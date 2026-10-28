@@ -5,13 +5,13 @@ import { redirect } from "next/navigation";
 import { requireSesion } from "@/lib/auth";
 import { nuevoId, updateDb } from "@/lib/db";
 import { archivo, texto } from "@/lib/form";
-import { guardarImagen } from "@/lib/storage";
+import { subirImagen } from "@/lib/storage";
 import type { Cliente } from "@/lib/types";
 
 export async function guardarCliente(form: FormData) {
   await requireSesion();
   const id = texto(form, "id") || nuevoId();
-  const imagenUrl = (await guardarImagen(archivo(form, "imagen"), "cliente")) ?? (texto(form, "imagenActual") || undefined);
+  const imagenUrl = (await subirImagen(archivo(form, "imagen"), "cliente", `/clientes/${texto(form, "id") || "nuevo"}`)) ?? (texto(form, "imagenActual") || undefined);
   const cliente: Cliente = {
     id,
     nombre: texto(form, "nombre").toUpperCase(),

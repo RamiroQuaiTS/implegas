@@ -21,7 +21,26 @@ export default async function Inicio({ searchParams }: { searchParams: Promise<{
         <input name="q" defaultValue={q ?? ""} placeholder="Buscar por folio, cliente o concepto…" className="input max-w-md" />
         <button className="btn">Buscar</button>
       </form>
-      <div className="card overflow-x-auto p-0">
+      {/* Celular: tarjetas. */}
+      <div className="space-y-2 md:hidden">
+        {lista.map((c) => (
+          <Link key={c.id} href={`/cotizaciones/${c.id}`} className="card p-3 block hover:border-brand">
+            <div className="flex justify-between text-xs text-gray-500">
+              <span className="font-mono">#{String(c.folio).padStart(4, "0")}</span>
+              <span>{fechaCorta(c.fecha)}</span>
+            </div>
+            <div className="font-semibold mt-1">{c.cliente.nombre}</div>
+            <div className="flex justify-between text-sm mt-0.5">
+              <span className="text-gray-600 truncate">{c.titulo}</span>
+              <span className="font-bold whitespace-nowrap ml-2">{dinero(totales(c, db.empresa.ivaPct).subtotal)}</span>
+            </div>
+          </Link>
+        ))}
+        {lista.length === 0 && <p className="text-gray-500">Aún no hay cotizaciones. Crea la primera con “Nueva cotización”.</p>}
+      </div>
+
+      {/* Escritorio: tabla; toda la fila abre la cotización. */}
+      <div className="card overflow-x-auto p-0 hidden md:block">
         <table className="table">
           <thead>
             <tr>
@@ -30,27 +49,25 @@ export default async function Inicio({ searchParams }: { searchParams: Promise<{
               <th>Cliente</th>
               <th>Concepto</th>
               <th className="text-right">Subtotal</th>
-              <th></th>
             </tr>
           </thead>
           <tbody>
             {lista.map((c) => (
-              <tr key={c.id}>
-                <td className="font-mono">{String(c.folio).padStart(4, "0")}</td>
+              <tr key={c.id} className="relative hover:bg-gray-50 cursor-pointer">
+                <td className="font-mono">
+                  <Link href={`/cotizaciones/${c.id}`} className="after:absolute after:inset-0">
+                    {String(c.folio).padStart(4, "0")}
+                  </Link>
+                </td>
                 <td className="whitespace-nowrap">{fechaCorta(c.fecha)}</td>
                 <td className="font-medium">{c.cliente.nombre}</td>
                 <td className="text-gray-600">{c.titulo}</td>
                 <td className="text-right">{dinero(totales(c, db.empresa.ivaPct).subtotal)}</td>
-                <td className="text-right whitespace-nowrap">
-                  <Link href={`/cotizaciones/${c.id}`} className="text-brand hover:underline">
-                    Abrir
-                  </Link>
-                </td>
               </tr>
             ))}
             {lista.length === 0 && (
               <tr>
-                <td colSpan={6} className="text-center text-gray-500 py-8">
+                <td colSpan={5} className="text-center text-gray-500 py-8">
                   Aún no hay cotizaciones. Crea la primera con “Nueva cotización”.
                 </td>
               </tr>

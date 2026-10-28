@@ -140,81 +140,87 @@ export function Editor({ inicial, productos, clientes, bases, ivaPct }: Props) {
       </section>
 
       {/* Conceptos */}
-      <section className="card space-y-3 overflow-x-auto">
+      <section className="card space-y-3">
         <h2 className="font-semibold">Conceptos</h2>
-        <table className="table min-w-[640px]">
-          <thead>
-            <tr>
-              <th className="w-24">Cantidad</th>
-              <th>Descripción</th>
-              <th className="w-36">Precio unitario</th>
-              <th className="w-28 text-right">Total</th>
-              <th className="w-24"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {c.partidas.map((p, i) => (
-              <tr key={i} className={p.tipo === "mano_obra" ? "bg-amber-50/60" : ""}>
-                <td>
-                  <input
-                    type="number"
-                    min="0"
-                    step="any"
-                    value={p.cantidad ?? ""}
-                    onFocus={(e) => e.target.select()}
-                    placeholder="—"
-                    onChange={(e) => setPartida(i, { cantidad: e.target.value === "" ? null : Number(e.target.value) })}
-                    className="input"
-                  />
-                </td>
-                <td>
-                  <div className="flex items-center gap-2">
-                    {p.tipo === "mano_obra" && (
-                      <span className="text-[10px] font-bold uppercase text-amber-700 whitespace-nowrap">Mano de obra</span>
-                    )}
-                    <input
-                      value={p.descripcion}
-                      onChange={(e) => setPartida(i, { descripcion: e.target.value.toUpperCase() })}
-                      className="input"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={p.precio || ""}
-                    placeholder="0.00"
-                    onFocus={(e) => e.target.select()}
-                    onChange={(e) => setPartida(i, { precio: Number(e.target.value) })}
-                    className="input"
-                  />
-                </td>
-                <td className="text-right font-medium">{dinero(importePartida(p))}</td>
-                <td className="whitespace-nowrap text-right">
-                  <button type="button" onClick={() => mover(i, -1)} className="px-1 text-gray-400 hover:text-gray-700" title="Subir">
-                    ▲
-                  </button>
-                  <button type="button" onClick={() => mover(i, 1)} className="px-1 text-gray-400 hover:text-gray-700" title="Bajar">
-                    ▼
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => set("partidas", c.partidas.filter((_, j) => j !== i))}
-                    className="px-2 text-red-500 hover:text-red-700"
-                    title="Quitar"
-                  >
-                    ✕
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {/* En celular cada concepto se apila; en pantallas grandes se ve como tabla. */}
+        <div className="hidden md:grid grid-cols-[6rem_1fr_9rem_7rem_5.5rem] gap-2 px-1 text-xs font-semibold uppercase text-gray-500">
+          <span>Cantidad</span>
+          <span>Descripción</span>
+          <span>Precio unitario</span>
+          <span className="text-right">Total</span>
+          <span></span>
+        </div>
+        <div className="divide-y divide-gray-100">
+          {c.partidas.map((p, i) => (
+            <div
+              key={i}
+              className={`grid grid-cols-[5rem_1fr_auto] md:grid-cols-[6rem_1fr_9rem_7rem_5.5rem] gap-2 items-center py-2 px-1 ${
+                p.tipo === "mano_obra" ? "bg-amber-50/60" : ""
+              }`}
+            >
+              <div className="col-span-3 md:col-span-1 md:col-start-2 md:row-start-1 flex items-center gap-2">
+                {p.tipo === "mano_obra" && (
+                  <span className="text-[10px] font-bold uppercase text-amber-700 whitespace-nowrap">Mano de obra</span>
+                )}
+                <input
+                  value={p.descripcion}
+                  placeholder="Descripción"
+                  onChange={(e) => setPartida(i, { descripcion: e.target.value.toUpperCase() })}
+                  className="input"
+                />
+              </div>
+              <label className="md:col-start-1 md:row-start-1">
+                <span className="label md:hidden">Cant.</span>
+                <input
+                  type="number"
+                  min="0"
+                  step="any"
+                  value={p.cantidad ?? ""}
+                  onFocus={(e) => e.target.select()}
+                  placeholder="—"
+                  onChange={(e) => setPartida(i, { cantidad: e.target.value === "" ? null : Number(e.target.value) })}
+                  className="input"
+                />
+              </label>
+              <label>
+                <span className="label md:hidden">Precio unitario</span>
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={p.precio || ""}
+                  placeholder="0.00"
+                  onFocus={(e) => e.target.select()}
+                  onChange={(e) => setPartida(i, { precio: Number(e.target.value) })}
+                  className="input"
+                />
+              </label>
+              <div className="text-right">
+                <span className="label md:hidden">Total</span>
+                <span className="font-medium whitespace-nowrap">{dinero(importePartida(p))}</span>
+              </div>
+              <div className="col-span-3 md:col-span-1 whitespace-nowrap text-right">
+                <button type="button" onClick={() => mover(i, -1)} className="px-2 py-1 text-gray-400 hover:text-gray-700" title="Subir">
+                  ▲
+                </button>
+                <button type="button" onClick={() => mover(i, 1)} className="px-2 py-1 text-gray-400 hover:text-gray-700" title="Bajar">
+                  ▼
+                </button>
+                <button
+                  type="button"
+                  onClick={() => set("partidas", c.partidas.filter((_, j) => j !== i))}
+                  className="px-2 py-1 text-red-500 hover:text-red-700"
+                  title="Quitar"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
 
         <div className="flex flex-wrap gap-2">
-          <select value={agregarId} onChange={(e) => setAgregarId(e.target.value)} className="input max-w-md">
+          <select value={agregarId} onChange={(e) => setAgregarId(e.target.value)} className="input w-full sm:max-w-md">
             <option value="">Agregar producto del catálogo…</option>
             {categorias.map((cat) => (
               <optgroup key={cat} label={cat}>

@@ -3,10 +3,16 @@ import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
 import { getDb } from "@/lib/db";
 import { dinero } from "@/lib/format";
+import { importarProductos } from "../actions";
 
-export default async function ProductosPage({ searchParams }: { searchParams: Promise<{ cat?: string; q?: string }> }) {
+export default async function ProductosPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ cat?: string; q?: string; msg?: string }>;
+}) {
   await requireAdmin();
-  const { cat, q } = await searchParams;
+  const { cat, q, msg } = await searchParams;
+  const [tipoMsg, textoMsg] = msg ? [msg.split(":")[0], msg.slice(msg.indexOf(":") + 1)] : [];
   const db = await getDb();
   const categorias = [...new Set(db.productos.map((p) => p.categoria))].sort();
   const lista = db.productos
@@ -18,10 +24,33 @@ export default async function ProductosPage({ searchParams }: { searchParams: Pr
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-3">
         <h1 className="text-xl font-bold">Catálogo de productos</h1>
-        <Link href="/admin/productos/nuevo" className="btn-primary ml-auto">
-          + Nuevo producto
-        </Link>
+        <div className="ml-auto flex flex-wrap gap-2">
+          <a href="/api/productos/excel" className="btn">
+            ⬇ Descargar Excel
+          </a>
+          <Link href="/admin/productos/nuevo" className="btn-primary">
+            + Nuevo producto
+          </Link>
+        </div>
       </div>
+      <form action={importarProductos} className="card flex flex-wrap items-center gap-3">
+        <div className="flex-1 min-w-64">
+          <span className="label">Subir Excel con cambios</span>
+          <input name="excel" type="file" required accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+        </div>
+        <button className="btn-primary">Subir y actualizar</button>
+        <p className="basis-full text-xs text-gray-500">
+          Descarga el Excel, edita precios o datos (o agrega renglones sin ID para productos nuevos) y súbelo aquí. Los productos que
+          no vengan en el archivo no se tocan.
+        </p>
+      </form>
+      {msg && (
+        <p
+          className={`rounded-md px-3 py-2 text-sm ${tipoMsg === "ok" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}
+        >
+          {textoMsg}
+        </p>
+      )}
       <form className="flex flex-wrap gap-2">
         <select name="cat" defaultValue={cat ?? ""} className="input max-w-xs">
           <option value="">Todas las categorías</option>

@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
 import { nuevoId, updateDb } from "@/lib/db";
+import { aplicarExcel } from "@/lib/excel";
 import { archivo, numero, texto } from "@/lib/form";
 import { guardarImagen } from "@/lib/storage";
 import type { Base, BaseItem, ManoObra, Producto, Rol } from "@/lib/types";
@@ -43,6 +44,27 @@ export async function eliminarProducto(form: FormData) {
   });
   revalidatePath("/admin/productos");
   redirect("/admin/productos");
+}
+
+export async function importarProductos(form: FormData) {
+  await requireAdmin();
+  const f = archivo(form, "excel");
+  let mensaje: string;
+  if (!f || !f.name.toLowerCase().endsWith(".xlsx")) {
+    mensaje = "error:Elige un archivo .xlsx (el que descargas con “Descargar Excel”).";
+  } else {
+    const contenido = await f.arrayBuffer();
+    mensaje = await updateDb(async (db) => {
+      // Se trabaja sobre una copia: si hay errores no se guarda nada.
+      const copia = structuredClone(db.productos);
+      const r = await aplicarExcel(contenido, copia);
+      if (r.errores.length) return "error:" + r.errores.slice(0, 5).join(" ");
+      db.productos = copia;
+      return `ok:Se actualizaron ${r.actualizados} productos y se agregaron ${r.nuevos} nuevos.`;
+    }).catch(() => "error:No se pudo leer el archivo. Revisa que sea un Excel (.xlsx).");
+  }
+  revalidatePath("/admin/productos");
+  redirect(`/admin/productos?msg=${encodeURIComponent(mensaje)}`);
 }
 
 // ---------- Bases de cotización ----------

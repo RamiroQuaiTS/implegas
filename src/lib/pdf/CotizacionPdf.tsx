@@ -195,52 +195,55 @@ export function CotizacionPdf({ cot, empresa, imagenes }: CotizacionPdfProps) {
           </View>
         </View>
 
-        {cot.incluye ? (
-          <View style={[s.seccion, { marginTop: 16 }]} wrap={false}>
-            <Text style={[s.seccionLbl, { width: 50 }]}>INCLUYE:</Text>
-            <Text style={{ flex: 1 }}>{cot.incluye}</Text>
-          </View>
-        ) : null}
-        {cot.aviso ? <Text style={s.aviso}>{cot.aviso}</Text> : null}
-
-        {cot.garantia ? (
-          <View style={s.seccion} wrap={false}>
-            <Text style={[s.seccionLbl, { width: 60 }]}>GARANTIA:</Text>
-            <View style={{ flex: 1 }}>
-              {lineas(cot.garantia).map((l, i) => (
-                <Text key={i} style={{ marginBottom: 2.5 }}>{l}</Text>
-              ))}
+        {/* Cierre: incluye, garantía, nota y firmas van juntos; si no caben, pasan completos a la hoja siguiente. */}
+        <View wrap={false} style={{ marginTop: 16 }}>
+          {cot.incluye ? (
+            <View style={[s.seccion, { marginTop: 0 }]}>
+              <Text style={[s.seccionLbl, { width: 50 }]}>INCLUYE:</Text>
+              <Text style={{ flex: 1 }}>{cot.incluye}</Text>
             </View>
-          </View>
-        ) : null}
-
-        {cot.nota ? (
-          <View style={[s.nota, { marginTop: 10 }]} wrap={false}>
-            <Text style={[s.seccionLbl, { width: 32 }]}>NOTA:</Text>
-            <View style={{ flex: 1 }}>
-              {lineas(cot.nota).map((l, i) => (
-                <Text key={i} style={{ marginBottom: 2.5 }}>{l}</Text>
-              ))}
-            </View>
-          </View>
-        ) : null}
-
-        <View style={s.firmas} wrap={false}>
-          <View style={s.firmaCol}>
-            <Text style={s.bold}>ATENTAMENTE</Text>
-            <View style={s.linea} />
-            <Text style={s.bold}>{empresa.firmante}</Text>
-            {empresa.whatsapp ? (
-              <View style={s.wa}>
-                {imagenes.whatsapp ? <Image src={imagenes.whatsapp} style={s.waIcon} /> : null}
-                <Text style={s.bold}>{empresa.whatsapp}</Text>
+          ) : null}
+          {cot.aviso ? <Text style={s.aviso}>{cot.aviso}</Text> : null}
+  
+          {cot.garantia ? (
+            <View style={s.seccion} wrap={false}>
+              <Text style={[s.seccionLbl, { width: 60 }]}>GARANTIA:</Text>
+              <View style={{ flex: 1 }}>
+                {lineas(cot.garantia).map((l, i) => (
+                  <Text key={i} style={{ marginBottom: 2.5 }}>{l}</Text>
+                ))}
               </View>
-            ) : null}
-          </View>
-          <View style={s.firmaCol}>
-            <Text style={s.bold}>ACEPTO</Text>
-            <View style={s.linea} />
-            <Text>CLIENTE</Text>
+            </View>
+          ) : null}
+  
+          {cot.nota ? (
+            <View style={[s.nota, { marginTop: 10 }]} wrap={false}>
+              <Text style={[s.seccionLbl, { width: 32 }]}>NOTA:</Text>
+              <View style={{ flex: 1 }}>
+                {lineas(cot.nota).map((l, i) => (
+                  <Text key={i} style={{ marginBottom: 2.5 }}>{l}</Text>
+                ))}
+              </View>
+            </View>
+          ) : null}
+  
+          <View style={s.firmas} wrap={false}>
+            <View style={s.firmaCol}>
+              <Text style={s.bold}>ATENTAMENTE</Text>
+              <View style={s.linea} />
+              <Text style={s.bold}>{empresa.firmante}</Text>
+              {empresa.whatsapp ? (
+                <View style={s.wa}>
+                  {imagenes.whatsapp ? <Image src={imagenes.whatsapp} style={s.waIcon} /> : null}
+                  <Text style={s.bold}>{empresa.whatsapp}</Text>
+                </View>
+              ) : null}
+            </View>
+            <View style={s.firmaCol}>
+              <Text style={s.bold}>ACEPTO</Text>
+              <View style={s.linea} />
+              <Text>CLIENTE</Text>
+            </View>
           </View>
         </View>
 

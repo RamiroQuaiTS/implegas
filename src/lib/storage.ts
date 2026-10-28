@@ -1,7 +1,7 @@
 import "server-only";
 import { promises as fs } from "fs";
 import path from "path";
-import { put } from "@vercel/blob";
+import { get, put } from "@vercel/blob";
 import { redirect } from "next/navigation";
 import { nuevoId } from "./db";
 
@@ -20,13 +20,29 @@ export async function guardarImagen(file: File | null, carpeta: string): Promise
   if (file.size > MAX_BYTES) throw new Error("La imagen pesa más de 3 MB.");
 
   const nombre = `${carpeta}-${nuevoId()}.${ext}`;
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
-    const blob = await put(`implegas/${nombre}`, file, { access: "public", contentType: file.type });
-    return blob.url;
+  if (process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID) {
+    const ruta = `implegas/${nombre}`;
+    try {
+      const blob = await put(ruta, file, { access: "public", contentType: file.type });
+      return blob.url;
+    } catch (e) {
+      // Store creado como "Private": se guarda privado y se sirve a través de /api/imagenes/.
+      if (!(e instanceof Error && /private/i.test(e.message))) throw e;
+      const blob = await put(ruta, file, { access: "private", contentType: file.type });
+      return `/api/imagenes/${blob.pathname}`;
+    }
   }
   await fs.mkdir(UPLOADS_DIR, { recursive: true });
   await fs.writeFile(path.join(UPLOADS_DIR, nombre), Buffer.from(await file.arrayBuffer()));
   return `/api/uploads/${nombre}`;
+}
+
+/** Lee una imagen de un Blob store privado. */
+export async function leerImagenPrivada(ruta: string): Promise<{ data: Buffer; tipo: string } | null> {
+  if (!ruta.startsWith("implegas/") || ruta.includes("..")) return null;
+  const r = await get(ruta, { access: "private" });
+  if (!r || r.statusCode !== 200) return null;
+  return { data: Buffer.from(await new Response(r.stream).arrayBuffer()), tipo: r.blob.contentType };
 }
 
 /** Carga una imagen (propia, local o remota) como buffer para incrustarla en el PDF. */
@@ -36,6 +52,10 @@ export async function cargarImagen(url: string | undefined): Promise<{ data: Buf
     let data: Buffer;
     if (url.startsWith("/api/uploads/")) {
       data = await fs.readFile(path.join(UPLOADS_DIR, path.basename(url)));
+    } else if (url.startsWith("/api/imagenes/")) {
+      const privado = await leerImagenPrivada(url.slice("/api/imagenes/".length));
+      if (!privado) return null;
+      data = privado.data;
     } else if (url.startsWith("/")) {
       const publico = path.join(process.cwd(), "public");
       const archivo = path.join(publico, url);

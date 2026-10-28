@@ -22,8 +22,8 @@ out/
 coverage/
 
 # Cotizaciones PDF generadas
-cotizaciones/
-output/
+/cotizaciones/
+/output/
 *.pdf
 
 # Bases de datos locales

@@ -47,3 +47,7 @@ next-env.d.ts
 # Datos locales de desarrollo (la semilla está en src/lib/seed.ts)
 data/
 public/uploads/
+
+# Notas personales y catálogos de proveedores (datos de origen)
+notas.txt
+CatalogoEquipoSegurdiad/

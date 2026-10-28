@@ -12,7 +12,18 @@ const COLUMNAS = [
   { header: "PRECIO", key: "precio", width: 14 },
   { header: "ESPECIFICACIONES", key: "especificaciones", width: 40 },
   { header: "ACTIVO (SI/NO)", key: "activo", width: 14 },
+  { header: "IMAGEN", key: "imagenUrl", width: 40 },
 ];
+
+// Solo se aceptan imágenes ya guardadas por la app (las de /public o las subidas a Vercel Blob).
+function imagenValida(url: string): boolean {
+  if (/^\/(seed|brand|api\/imagenes|api\/uploads)\/[\w./-]+$/.test(url) && !url.includes("..")) return true;
+  try {
+    return new URL(url).hostname.endsWith(".blob.vercel-storage.com");
+  } catch {
+    return false;
+  }
+}
 
 export async function productosAExcel(productos: Producto[]): Promise<Buffer> {
   const wb = new ExcelJS.Workbook();
@@ -22,7 +33,7 @@ export async function productosAExcel(productos: Producto[]): Promise<Buffer> {
   ws.getRow(1).fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFDDEBF7" } };
   ws.views = [{ state: "frozen", ySplit: 1 }];
   for (const p of [...productos].sort((a, b) => a.categoria.localeCompare(b.categoria) || a.nombre.localeCompare(b.nombre))) {
-    ws.addRow({ ...p, especificaciones: p.especificaciones ?? "", activo: p.activo ? "SI" : "NO" });
+    ws.addRow({ ...p, especificaciones: p.especificaciones ?? "", activo: p.activo ? "SI" : "NO", imagenUrl: p.imagenUrl ?? "" });
   }
   ws.getColumn("precio").numFmt = '"$"#,##0.00';
   ws.getColumn("especificaciones").alignment = { wrapText: true, vertical: "top" };
@@ -35,7 +46,7 @@ export async function productosAExcel(productos: Producto[]): Promise<Buffer> {
     "• No cambies la columna ID: con ella se identifica cada producto existente.",
     "• Para agregar un producto nuevo, agrega un renglón con el ID vacío.",
     "• Para dejar de usar un producto, pon NO en ACTIVO. Los productos que no estén en el archivo no se modifican.",
-    "• Las imágenes no viajan en el Excel: se conservan las que ya tenga cada producto.",
+    "• IMAGEN es la dirección de la foto que ya tiene el producto. Déjala como está o vacía para conservarla; las fotos nuevas se suben desde la app.",
   ].forEach((t) => ayuda.addRow([t]));
 
   return Buffer.from(await wb.xlsx.writeBuffer());
@@ -96,12 +107,17 @@ export async function aplicarExcel(archivo: ArrayBuffer, productos: Producto[]):
       especificaciones: v("especificaciones") || undefined,
       activo: pos.activo ? !/^no$/i.test(v("activo")) : true,
     };
+    const imagen = v("imagenUrl");
+    if (imagen && !imagenValida(imagen)) {
+      r.errores.push(`Renglón ${n}: la IMAGEN no es una dirección válida de la app.`);
+      return;
+    }
     const existente = porId.get(v("id"));
     if (existente) {
-      Object.assign(existente, datos);
+      Object.assign(existente, datos, imagen ? { imagenUrl: imagen } : {});
       r.actualizados++;
     } else {
-      const nuevo: Producto = { id: nuevoId(), ...datos };
+      const nuevo: Producto = { id: v("id") || nuevoId(), ...datos, imagenUrl: imagen || undefined };
       productos.push(nuevo);
       porId.set(nuevo.id, nuevo);
       r.nuevos++;

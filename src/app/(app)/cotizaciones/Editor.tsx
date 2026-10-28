@@ -5,6 +5,7 @@ import { useMemo, useState, useTransition } from "react";
 import { dinero, importePartida, totales } from "@/lib/format";
 import type { Base, Cliente, Partida, Producto } from "@/lib/types";
 import { guardarCotizacion, type BorradorCotizacion } from "./actions";
+import { BuscadorProductos } from "./BuscadorProductos";
 
 interface Props {
   inicial: BorradorCotizacion;
@@ -18,7 +19,6 @@ export function Editor({ inicial, productos, clientes, bases, ivaPct }: Props) {
   const [c, setC] = useState<BorradorCotizacion>(inicial);
   const [error, setError] = useState<string | null>(null);
   const [guardando, startTransition] = useTransition();
-  const [agregarId, setAgregarId] = useState("");
 
   const set = <K extends keyof BorradorCotizacion>(k: K, v: BorradorCotizacion[K]) => setC((x) => ({ ...x, [k]: v }));
   const setCliente = (k: keyof BorradorCotizacion["cliente"], v: string) =>
@@ -35,7 +35,11 @@ export function Editor({ inicial, productos, clientes, bases, ivaPct }: Props) {
     });
 
   const { subtotal, iva, total } = totales(c, ivaPct);
-  const categorias = useMemo(() => [...new Set(productos.map((p) => p.categoria))].sort(), [productos]);
+  const enCotizacion = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const p of c.partidas) if (p.productoId) m.set(p.productoId, (m.get(p.productoId) ?? 0) + (p.cantidad ?? 1));
+    return m;
+  }, [c.partidas]);
   const imagenes = useMemo(() => productos.filter((p) => p.imagenUrl), [productos]);
   const logos = useMemo(() => bases.filter((b) => b.logoUrl), [bases]);
 
@@ -57,12 +61,18 @@ export function Editor({ inicial, productos, clientes, bases, ivaPct }: Props) {
     }));
   }
 
-  function agregarProducto() {
-    const p = productos.find((x) => x.id === agregarId);
-    if (!p) return;
-    // Los productos van antes de la mano de obra, como en las cotizaciones de ejemplo.
-    const nueva: Partida = { tipo: "producto", productoId: p.id, cantidad: 1, descripcion: p.nombre, precio: p.precio };
+  function agregarProducto(p: Producto) {
     setC((x) => {
+      // Si ya está en la cotización, solo suma 1 a la cantidad.
+      const existente = x.partidas.findIndex((y) => y.productoId === p.id);
+      if (existente >= 0) {
+        return {
+          ...x,
+          partidas: x.partidas.map((y, j) => (j === existente ? { ...y, cantidad: (y.cantidad ?? 0) + 1 } : y)),
+        };
+      }
+      // Los productos van antes de la mano de obra, como en las cotizaciones de ejemplo.
+      const nueva: Partida = { tipo: "producto", productoId: p.id, cantidad: 1, descripcion: p.nombre, precio: p.precio };
       const i = x.partidas.findIndex((y) => y.tipo === "mano_obra");
       const ps = [...x.partidas];
       ps.splice(i < 0 ? ps.length : i, 0, nueva);
@@ -72,7 +82,6 @@ export function Editor({ inicial, productos, clientes, bases, ivaPct }: Props) {
         ...(x.imagenUrl || !p.imagenUrl ? {} : { imagenUrl: p.imagenUrl, imagenTexto: p.especificaciones ?? "" }),
       };
     });
-    setAgregarId("");
   }
 
   function guardar() {
@@ -219,24 +228,9 @@ export function Editor({ inicial, productos, clientes, bases, ivaPct }: Props) {
           ))}
         </div>
 
+        <BuscadorProductos productos={productos} enCotizacion={enCotizacion} onAgregar={agregarProducto} />
+
         <div className="flex flex-wrap gap-2">
-          <select value={agregarId} onChange={(e) => setAgregarId(e.target.value)} className="input w-full sm:max-w-md">
-            <option value="">Agregar producto del catálogo…</option>
-            {categorias.map((cat) => (
-              <optgroup key={cat} label={cat}>
-                {productos
-                  .filter((p) => p.categoria === cat)
-                  .map((p) => (
-                    <option key={p.id} value={p.id}>
-                      {p.nombre} ({dinero(p.precio)})
-                    </option>
-                  ))}
-              </optgroup>
-            ))}
-          </select>
-          <button type="button" onClick={agregarProducto} disabled={!agregarId} className="btn">
-            Agregar
-          </button>
           <button
             type="button"
             onClick={() =>

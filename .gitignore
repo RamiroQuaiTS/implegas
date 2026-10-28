@@ -1,0 +1,40 @@
+# Secretos y configuración local
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*.json
+secrets/
+
+# Dependencias
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Build / salida
+dist/
+build/
+out/
+.next/
+coverage/
+
+# Cotizaciones PDF generadas
+cotizaciones/
+output/
+*.pdf
+
+# Bases de datos locales
+*.sqlite
+*.sqlite3
+*.db
+
+# Sistema / editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.log

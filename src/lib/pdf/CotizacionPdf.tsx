@@ -78,7 +78,8 @@ const s = StyleSheet.create({
   linea: { borderBottomWidth: 0.6, borderColor: "#555", marginTop: 10, marginBottom: 4, width: 190 },
   wa: { flexDirection: "row", alignItems: "center", marginTop: 2 },
   waIcon: { width: 18, height: 18, marginRight: 8 },
-  footer: { position: "absolute", bottom: 28, left: 50, right: 76, textAlign: "center", fontSize: 9.5 },
+  footer: { position: "absolute", bottom: 20, left: 50, right: 76, textAlign: "center", fontSize: 9.5 },
+  folioPie: { marginTop: 3, fontSize: 7.5, color: "#666" },
 });
 
 function lineas(t: string) {
@@ -247,10 +248,18 @@ export function CotizacionPdf({ cot, empresa, imagenes }: CotizacionPdfProps) {
           </View>
         </View>
 
-        <Text style={s.footer} fixed>
-          {empresa.direccion}
-          {empresa.telefono ? `   TEL: ${empresa.telefono}` : ""}
-        </Text>
+        <View style={s.footer} fixed>
+          <Text>
+            {empresa.direccion}
+            {empresa.telefono ? `   TEL: ${empresa.telefono}` : ""}
+          </Text>
+          <Text
+            style={s.folioPie}
+            render={({ pageNumber, totalPages }) =>
+              `COTIZACIÓN ${String(cot.folio).padStart(4, "0")} · ${cot.cliente.nombre} · HOJA ${pageNumber} DE ${totalPages}`
+            }
+          />
+        </View>
       </Page>
     </Document>
   );

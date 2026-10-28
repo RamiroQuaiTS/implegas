@@ -1,6 +1,6 @@
 import { getDb } from "@/lib/db";
 import { nombreArchivo } from "@/lib/format";
-import { generarPdf, respuestaPdf } from "@/lib/pdf/render";
+import { respuestaPdf } from "@/lib/pdf/render";
 
 export const runtime = "nodejs";
 
@@ -10,5 +10,5 @@ export async function GET(_req: Request, { params }: { params: Promise<{ token: 
   const db = await getDb();
   const cot = token.length >= 16 ? db.cotizaciones.find((c) => c.shareToken === token) : undefined;
   if (!cot) return new Response("Cotización no encontrada", { status: 404 });
-  return respuestaPdf(await generarPdf(cot, db.empresa), nombreArchivo(cot), false);
+  return respuestaPdf(cot, db.empresa, nombreArchivo(cot), false);
 }

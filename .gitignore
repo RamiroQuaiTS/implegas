@@ -38,3 +38,12 @@ desktop.ini
 .vscode/
 .idea/
 *.log
+
+# Next.js / Vercel
+.vercel/
+*.tsbuildinfo
+next-env.d.ts
+
+# Datos locales de desarrollo (la semilla está en src/lib/seed.ts)
+data/
+public/uploads/

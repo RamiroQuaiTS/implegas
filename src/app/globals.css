@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #2f9a3f;
+  --color-brand-dark: #237530;
+  --color-brand-light: #dbeefe;
+}
+
+body {
+  background: #f9fafb;
+  color: #1f2937;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer components {
+  .label {
+    @apply block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1;
+  }
+  .input {
+    @apply w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-md bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand-dark disabled:opacity-60 cursor-pointer;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-60 cursor-pointer;
+  }
+  .btn-danger {
+    @apply inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 cursor-pointer;
+  }
+  .card {
+    @apply rounded-xl bg-white p-5 shadow-sm border border-gray-200;
+  }
+  .table {
+    @apply w-full text-sm;
+  }
+  .table th {
+    @apply text-left text-xs font-semibold uppercase text-gray-500 px-3 py-2 border-b border-gray-200;
+  }
+  .table td {
+    @apply px-3 py-2 border-b border-gray-100 align-middle;
+  }
+}

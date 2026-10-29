@@ -15,7 +15,7 @@ export async function iniciarSesion(_prev: string | null, form: FormData): Promi
     return "Correo o contraseña incorrectos.";
   }
   (await cookies()).set(COOKIE, await firmarSesion({ uid: u.id, rol: u.rol, nombre: u.nombre }), cookieOpciones);
-  redirect("/");
+  redirect("/cotizador");
 }
 
 export async function cerrarSesion() {

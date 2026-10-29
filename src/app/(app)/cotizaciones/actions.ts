@@ -87,7 +87,7 @@ export async function guardarCotizacion(b: BorradorCotizacion): Promise<{ error:
     return nueva.id;
   });
 
-  revalidatePath("/");
+  revalidatePath("/cotizador");
   redirect(`/cotizaciones/${id}`);
 }
 
@@ -112,17 +112,17 @@ export async function duplicarCotizacion(form: FormData) {
     db.cotizaciones.push(copia);
     return copia.id;
   });
-  revalidatePath("/");
-  redirect(id ? `/cotizaciones/${id}/editar` : "/");
+  revalidatePath("/cotizador");
+  redirect(id ? `/cotizaciones/${id}/editar` : "/cotizador");
 }
 
 export async function eliminarCotizacion(form: FormData) {
   const sesion = await requireSesion();
-  if (sesion.rol !== "admin") redirect("/");
+  if (sesion.rol !== "admin") redirect("/cotizador");
   const id = String(form.get("id"));
   await updateDb((db) => {
     db.cotizaciones = db.cotizaciones.filter((c) => c.id !== id);
   });
-  revalidatePath("/");
-  redirect("/");
+  revalidatePath("/cotizador");
+  redirect("/cotizador");
 }

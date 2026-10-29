@@ -6,7 +6,7 @@ import { cerrarSesion } from "../login/actions";
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const sesion = await requireSesion();
   const links = [
-    { href: "/", label: "Cotizaciones" },
+    { href: "/cotizador", label: "Cotizaciones" },
     { href: "/clientes", label: "Clientes" },
     ...(sesion.rol === "admin"
       ? [
@@ -23,7 +23,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       <header className="bg-white border-b border-gray-200">
         {/* En celular: logo y salir arriba, menú en una sola línea deslizable debajo. */}
         <div className="mx-auto max-w-6xl px-4 py-2 md:py-3 flex flex-wrap items-center gap-x-6 gap-y-1">
-          <Link href="/">
+          <Link href="/cotizador">
             <Image src="/brand/implegas.png" alt="ImpleGas" width={110} height={47} className="w-20 md:w-[110px] h-auto" />
           </Link>
           <form action={cerrarSesion} className="ml-auto md:order-last flex items-center gap-3 text-sm text-gray-500">

@@ -17,7 +17,7 @@ export default async function VerCotizacion({ params }: { params: Promise<{ id: 
 
   return (
     <div className="space-y-4">
-      <Link href="/" className="text-sm text-gray-500 hover:underline">
+      <Link href="/cotizador" className="text-sm text-gray-500 hover:underline">
         ← Cotizaciones
       </Link>
       <div className="flex flex-wrap items-start gap-4">

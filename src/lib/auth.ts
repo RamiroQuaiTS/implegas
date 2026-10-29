@@ -15,6 +15,6 @@ export async function requireSesion(): Promise<Sesion> {
 
 export async function requireAdmin(): Promise<Sesion> {
   const s = await requireSesion();
-  if (s.rol !== "admin") redirect("/");
+  if (s.rol !== "admin") redirect("/cotizador");
   return s;
 }

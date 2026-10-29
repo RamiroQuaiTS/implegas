@@ -40,7 +40,7 @@ export async function guardarImagen(file: File | null, carpeta: string): Promise
 /** Lee una imagen de un Blob store privado. */
 export async function leerImagenPrivada(ruta: string): Promise<{ data: Buffer; tipo: string } | null> {
   if (!ruta.startsWith("implegas/") || ruta.includes("..")) return null;
-  const r = await get(ruta, { access: "private" });
+  const r = await get(ruta, { access: "private" }).catch(() => null);
   if (!r || r.statusCode !== 200) return null;
   return { data: Buffer.from(await new Response(r.stream).arrayBuffer()), tipo: r.blob.contentType };
 }

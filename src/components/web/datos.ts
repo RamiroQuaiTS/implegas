@@ -54,9 +54,22 @@ export const SERVICIOS = [
   },
 ];
 
+// Íconos de línea (trazos de 24x24) para los valores.
 export const VALORES = [
-  { icono: "🛡️", texto: "Seguridad y cumplimiento normativo" },
-  { icono: "🤝", texto: "Honestidad y buena práctica" },
-  { icono: "💬", texto: "Comunicación abierta y dinámica" },
-  { icono: "🌱", texto: "Pasión por el crecimiento" },
+  {
+    texto: "Seguridad y cumplimiento normativo",
+    trazos: ["M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z", "M9 12l2 2 4-4"],
+  },
+  {
+    texto: "Honestidad y buena práctica",
+    trazos: ["M8 11l3 3 5-5", "M12 21a9 9 0 100-18 9 9 0 000 18z"],
+  },
+  {
+    texto: "Comunicación abierta y dinámica",
+    trazos: ["M21 12a8 8 0 01-11.6 7.1L4 20l1-4.4A8 8 0 1121 12z", "M8.5 12h.01M12 12h.01M15.5 12h.01"],
+  },
+  {
+    texto: "Pasión por el crecimiento",
+    trazos: ["M3 17l6-6 4 4 8-8", "M15 7h6v6"],
+  },
 ];

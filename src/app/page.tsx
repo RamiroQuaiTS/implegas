@@ -129,9 +129,15 @@ export default async function Inicio() {
         </div>
         <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4">
           {VALORES.map((v) => (
-            <div key={v.texto} className="rounded-xl border border-gray-100 bg-gray-50 p-5 text-center">
-              <div className="text-3xl">{v.icono}</div>
-              <div className="mt-2 text-sm font-semibold text-gray-700">{v.texto}</div>
+            <div key={v.texto} className="rounded-xl border border-gray-100 bg-white p-5 text-center shadow-sm">
+              <div className={`mx-auto flex h-14 w-14 items-center justify-center rounded-full ${DEGRADADO} shadow-md`}>
+                <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  {v.trazos.map((d) => (
+                    <path key={d} d={d} />
+                  ))}
+                </svg>
+              </div>
+              <div className="mt-3 text-sm font-semibold text-gray-700">{v.texto}</div>
             </div>
           ))}
         </div>

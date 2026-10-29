@@ -4,13 +4,14 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireSesion } from "@/lib/auth";
 import { nuevoId, updateDb } from "@/lib/db";
+import { registrarCliente } from "@/lib/clientes";
 import { hoyISO, sumarDias } from "@/lib/format";
 import type { Cotizacion } from "@/lib/types";
 
 export type BorradorCotizacion = Omit<
   Cotizacion,
   "id" | "folio" | "shareToken" | "creadoPor" | "creadoEn" | "actualizadoEn"
-> & { id?: string; guardarCliente?: boolean };
+> & { id?: string };
 
 function token(): string {
   return nuevoId() + nuevoId();
@@ -41,17 +42,9 @@ export async function guardarCotizacion(b: BorradorCotizacion): Promise<{ error:
     }));
 
   const id = await updateDb((db) => {
+    // Todo cliente cotizado queda en el catálogo de clientes.
     const cliente = { ...b.cliente };
-    if (b.guardarCliente && !cliente.clienteId) {
-      cliente.clienteId = nuevoId();
-      db.clientes.push({
-        id: cliente.clienteId,
-        nombre: cliente.nombre.toUpperCase(),
-        email: cliente.email || undefined,
-        cel: cliente.cel || undefined,
-        domicilio: cliente.domicilio || undefined,
-      });
-    }
+    cliente.clienteId = registrarCliente(db, cliente);
     const datos = {
       fecha: b.fecha || hoyISO(),
       validoHasta: b.validoHasta || sumarDias(hoyISO(), db.empresa.vigenciaDias),

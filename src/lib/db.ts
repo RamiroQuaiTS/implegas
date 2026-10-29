@@ -2,6 +2,7 @@ import "server-only";
 import { promises as fs } from "fs";
 import path from "path";
 import { Redis } from "@upstash/redis";
+import { migrarClientesDeCotizaciones } from "./clientes";
 import { crearSemilla } from "./seed";
 import type { Db } from "./types";
 
@@ -41,7 +42,11 @@ async function escribir(db: Db): Promise<void> {
 
 export async function getDb(): Promise<Db> {
   const db = await leer();
-  if (db) return db;
+  if (db) {
+    // Ajustes de datos guardados con versiones anteriores de la app.
+    if (migrarClientesDeCotizaciones(db)) await escribir(db);
+    return db;
+  }
   const semilla = crearSemilla();
   await escribir(semilla);
   return semilla;

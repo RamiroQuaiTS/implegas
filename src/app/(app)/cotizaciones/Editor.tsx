@@ -47,7 +47,6 @@ export function Editor({ inicial, productos, clientes, bases, ivaPct }: Props) {
     const cl = clientes.find((x) => x.id === id);
     setC((x) => ({
       ...x,
-      guardarCliente: false,
       cliente: cl
         ? {
             clienteId: cl.id,
@@ -122,10 +121,7 @@ export function Editor({ inicial, productos, clientes, bases, ivaPct }: Props) {
             </select>
           </label>
           {!c.cliente.clienteId && (
-            <label className="flex items-center gap-2 text-sm pb-2">
-              <input type="checkbox" checked={!!c.guardarCliente} onChange={(e) => set("guardarCliente", e.target.checked)} />
-              Guardar en el catálogo de clientes
-            </label>
+            <span className="pb-2 text-xs text-gray-500">Se guardará en el catálogo de clientes al guardar.</span>
           )}
         </div>
         <div className="grid gap-3 sm:grid-cols-2">

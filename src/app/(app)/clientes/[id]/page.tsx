@@ -16,10 +16,10 @@ export default async function ClienteForm({ params }: { params: Promise<{ id: st
   if (id !== "nuevo" && !c) notFound();
   const cotizaciones = c ? db.cotizaciones.filter((q) => q.cliente.clienteId === c.id) : [];
 
-  const campo = (name: string, label: string, valor?: string, extra = "") => (
+  const campo = (name: string, label: string, valor?: string, extra = "", requerido = false) => (
     <label className="block">
       <span className="label">{label}</span>
-      <input name={name} defaultValue={valor} className={`input ${extra}`} />
+      <input name={name} defaultValue={valor} required={requerido} className={`input ${extra}`} />
     </label>
   );
 
@@ -34,11 +34,11 @@ export default async function ClienteForm({ params }: { params: Promise<{ id: st
         <input type="hidden" name="id" value={c?.id ?? ""} />
         <input type="hidden" name="imagenActual" value={c?.imagenUrl ?? ""} />
         <label className="block">
-          <span className="label">Nombre</span>
+          <span className="label">Nombre *</span>
           <input name="nombre" required defaultValue={c?.nombre} className="input uppercase" placeholder="ARQ. DIEGO ACOSTA" />
         </label>
         <div className="grid gap-4 sm:grid-cols-2">
-          {campo("cel", "Celular / WhatsApp", c?.cel)}
+          {campo("cel", "Celular / WhatsApp *", c?.cel, "", true)}
           {campo("email", "Correo", c?.email)}
         </div>
         {campo("domicilio", "Domicilio", c?.domicilio, "uppercase")}

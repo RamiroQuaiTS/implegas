@@ -164,7 +164,8 @@ export function CotizacionPdf({ cot, empresa, imagenes }: CotizacionPdfProps) {
         <View style={s.debajo} wrap={false}>
           <View style={s.producto}>
             {imagenes.producto ? <Image src={imagenes.producto} style={s.productoImg} /> : null}
-            {cot.imagenTexto ? (
+            {/* El texto acompaña a la imagen: sin imagen no se imprime. */}
+            {imagenes.producto && cot.imagenTexto ? (
               <View style={s.productoTxt}>
                 {lineas(cot.imagenTexto).map((l, i) => {
                   const [k, ...v] = l.split(":");

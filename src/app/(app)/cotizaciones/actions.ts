@@ -16,10 +16,19 @@ function token(): string {
   return nuevoId() + nuevoId();
 }
 
+function validarCotizacion(b: BorradorCotizacion): string | null {
+  const faltan = [
+    !b.cliente.nombre.trim() && "el nombre del cliente",
+    b.cliente.cel.replace(/\D/g, "").length < 10 && "el teléfono del cliente (10 dígitos)",
+    !b.partidas.some((p) => p.descripcion.trim()) && "al menos un concepto",
+  ].filter(Boolean);
+  return faltan.length ? `Falta ${faltan.join(", ")}.` : null;
+}
+
 export async function guardarCotizacion(b: BorradorCotizacion): Promise<{ error: string } | void> {
   const sesion = await requireSesion();
-  if (!b.cliente.nombre.trim()) return { error: "Falta el nombre del cliente." };
-  if (b.partidas.length === 0) return { error: "Agrega al menos un concepto." };
+  const error = validarCotizacion(b);
+  if (error) return { error };
 
   const ahora = new Date().toISOString();
   const partidas = b.partidas

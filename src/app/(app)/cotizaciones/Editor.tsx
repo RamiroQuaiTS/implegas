@@ -129,10 +129,10 @@ export function Editor({ inicial, productos, clientes, bases, ivaPct }: Props) {
           )}
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
-          <Campo label="Nombre" value={c.cliente.nombre} onChange={(v) => setCliente("nombre", v)} upper />
+          <Campo label="Nombre *" value={c.cliente.nombre} onChange={(v) => setCliente("nombre", v)} upper />
           <Campo label="Atención" value={c.cliente.atencion} onChange={(v) => setCliente("atencion", v)} upper />
           <Campo label="E-mail" value={c.cliente.email} onChange={(v) => setCliente("email", v)} upper />
-          <Campo label="Celular" value={c.cliente.cel} onChange={(v) => setCliente("cel", v)} />
+          <Campo label="Celular *" value={c.cliente.cel} onChange={(v) => setCliente("cel", v)} />
         </div>
         <Campo label="Domicilio" value={c.cliente.domicilio} onChange={(v) => setCliente("domicilio", v)} upper />
         <div className="grid gap-3 sm:grid-cols-3">
@@ -307,12 +307,29 @@ export function Editor({ inicial, productos, clientes, bases, ivaPct }: Props) {
         <Area label="Nota" value={c.nota} onChange={(v) => set("nota", v)} rows={5} />
       </section>
 
+      {error && (
+        <div
+          role="alertdialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+          onClick={() => setError(null)}
+        >
+          <div className="w-full max-w-sm rounded-xl bg-white p-6 shadow-xl text-center" onClick={(e) => e.stopPropagation()}>
+            <div className="text-4xl">⚠️</div>
+            <h2 className="mt-2 text-lg font-bold">Revisa la cotización</h2>
+            <p className="mt-2 text-sm text-gray-600">{error}</p>
+            <button type="button" autoFocus onClick={() => setError(null)} className="btn-primary mt-5 w-full">
+              Entendido
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="fixed bottom-0 inset-x-0 bg-white/95 border-t border-gray-200 py-3">
         <div className="mx-auto max-w-6xl px-4 flex items-center gap-4">
           <span className="text-sm text-gray-600">
             Subtotal <b className="text-gray-900">{dinero(subtotal)}</b>
           </span>
-          {error && <span className="text-sm text-red-600">{error}</span>}
           <button onClick={guardar} disabled={guardando} className="btn-primary ml-auto">
             {guardando ? "Guardando…" : "Guardar y generar PDF"}
           </button>

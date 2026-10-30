@@ -4,7 +4,7 @@ Oct 30, 2026 · @Ramiro Tello
 
 Para: **Ing. Luis Adolfo Ornelas Torres**, ImpleGas (Implementos para Gas), León, Gto.
 
-Propuesta para dejar en producción la **página web de ImpleGas** y el **sistema de cotizaciones con panel de administración** que ya probaste en versión demo. Hay dos formas de contratarlo: **Opción A, pago único de $22,000 MXN** (tú eres dueño de todo) u **Opción B, $1,900 MXN al mes** (hospedaje, dominio y soporte incluidos).
+Propuesta para dejar en producción la **página web de ImpleGas** y el **sistema de cotizaciones con panel de administración** que ya probaste en versión demo. Hay dos formas de contratarlo: **Opción A, pago único de $22,000 MXN** (tú eres dueño de todo) u **Opción B, $1,500 MXN al mes** (hospedaje, dominio y soporte incluidos).
 
 ## Qué incluye
 
@@ -59,7 +59,7 @@ Después pagas directo los servicios externos (unos $410 MXN al mes). Cambios o 
 
 ## Opción B: mensualidad todo incluido
 
-**$1,900 MXN al mes, sin pago inicial, con un plazo mínimo de 12 meses.** No te preocupas por nada técnico.
+**$1,500 MXN al mes, sin pago inicial, con un plazo mínimo de 12 meses.** No te preocupas por nada técnico.
 
 Incluye:
 
@@ -78,9 +78,9 @@ El primer año la Opción B cuesta menos; a partir del segundo año conviene la 
 |  | Opción A: pago único | Opción B: mensualidad |
 | --- | --- | --- |
 | Pago inicial | $22,000 MXN | $0 |
-| Costo mensual | Unos $410 MXN (servicios externos) | $1,900 MXN |
-| Total al año 1 | Unos $26,900 MXN | $22,800 MXN |
-| Total acumulado a 2 años | Unos $31,800 MXN | $45,600 MXN |
+| Costo mensual | Unos $410 MXN (servicios externos) | $1,500 MXN |
+| Total al año 1 | Unos $26,900 MXN | $18,000 MXN |
+| Total acumulado a 2 años | Unos $31,800 MXN | $36,000 MXN |
 | Dueño del sistema | Tú | Yo, con opción de compra |
 | Soporte y cambios | Por hora o póliza opcional | Incluidos (hasta 2 h al mes) |
 

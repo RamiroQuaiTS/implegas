@@ -4,7 +4,7 @@ Oct 30, 2026 · @Ramiro Tello
 
 Para: **Ing. Luis Adolfo Ornelas Torres**, ImpleGas (Implementos para Gas), León, Gto.
 
-Propuesta para dejar en producción la **página web de ImpleGas** y el **sistema de cotizaciones con panel de administración** que ya probaste en versión demo. Hay dos formas de contratarlo: **Opción A, pago único de $22,000 MXN** (tú eres dueño de todo) u **Opción B, $1,500 MXN al mes** (hospedaje, dominio y soporte incluidos).
+Propuesta para dejar en producción la **página web de ImpleGas** y el **sistema de cotizaciones con panel de administración** que ya probaste en versión demo. Hay dos formas de contratarlo: **Opción A, pago único de $15,000 MXN** (tú eres dueño de todo) u **Opción B, $1,500 MXN al mes** (hospedaje, dominio y soporte incluidos).
 
 ## Qué incluye
 
@@ -41,13 +41,13 @@ La base de datos no requiere pago: el plan gratis permite 500 mil operaciones al
 
 ## Opción A: pago único, eres dueño de todo
 
-**$22,000 MXN en un solo pago.** El sistema, el código y todas las cuentas quedan a tu nombre.
+**$15,000 MXN en un solo pago.** El sistema, el código y todas las cuentas quedan a tu nombre.
 
 | Concepto | Precio |
 | --- | --- |
-| Diseño y desarrollo de la página web | $7,000 MXN |
-| Sistema de cotizaciones y panel de administración | $15,000 MXN |
-| **Total** | **$22,000 MXN** |
+| Diseño y desarrollo de la página web | $5,000 MXN |
+| Sistema de cotizaciones y panel de administración | $10,000 MXN |
+| **Total** | **$15,000 MXN** |
 
 Incluye:
 
@@ -77,10 +77,10 @@ El primer año la Opción B cuesta menos; a partir del segundo año conviene la 
 
 |  | Opción A: pago único | Opción B: mensualidad |
 | --- | --- | --- |
-| Pago inicial | $22,000 MXN | $0 |
+| Pago inicial | $15,000 MXN | $0 |
 | Costo mensual | Unos $410 MXN (servicios externos) | $1,500 MXN |
-| Total al año 1 | Unos $26,900 MXN | $18,000 MXN |
-| Total acumulado a 2 años | Unos $31,800 MXN | $36,000 MXN |
+| Total al año 1 | Unos $19,900 MXN | $18,000 MXN |
+| Total acumulado a 2 años | Unos $24,800 MXN | $36,000 MXN |
 | Dueño del sistema | Tú | Yo, con opción de compra |
 | Soporte y cambios | Por hora o póliza opcional | Incluidos (hasta 2 h al mes) |
 

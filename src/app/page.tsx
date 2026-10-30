@@ -241,7 +241,6 @@ export default async function Inicio() {
       <footer className="border-t border-gray-100 bg-white">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-6 px-4 py-8 text-sm text-gray-500">
           <img src="/web/implegas-logo.png" alt="ImpleGas" className="h-10 w-auto" />
-          <img src="/web/prana.png" alt="PRANA" className="h-14 w-auto" />
           <p className="flex-1 min-w-48">© {new Date().getFullYear()} Implementos para Gas · León, Guanajuato</p>
           <Link href="/login" className="text-xs text-gray-400 hover:text-gray-600">
             Acceso
